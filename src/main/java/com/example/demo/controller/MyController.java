@@ -2,7 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +38,5 @@ public class MyController {
     public String test2() {
         return student2 == null ? "null" : student2.toString();
     }
-
 
 }

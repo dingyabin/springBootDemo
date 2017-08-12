@@ -24,9 +24,11 @@ public class MyConfigration {
 
     @Bean
     public Student student2(){
+        //此处student()并不会new 一个新的student，而是会用上面的返回值
+        //换句话说:(student2()==student())=true
         Student student = student();
         student.setName("update");
-        return  student;
+        return  student;//student(),student2()的name都是“update”
     }
 
 }
