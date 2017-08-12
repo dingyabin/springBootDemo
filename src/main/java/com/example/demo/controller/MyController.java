@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +24,8 @@ import javax.annotation.Resource;
 @EnableConfigurationProperties(MyConfig.class)
 public class MyController {
 
+    private Logger logger= LoggerFactory.getLogger(MyController.class);
+
     @Resource
     private MyConfig myConfig;
 
@@ -31,6 +35,7 @@ public class MyController {
 
     @RequestMapping("/test")
     public String test() {
+        logger.info("-------------------------------------------------------------------");
         return myConfig == null ? "null" : myConfig.toString();
     }
 
