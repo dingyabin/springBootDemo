@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.bean.Weight;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
@@ -50,7 +51,10 @@ public class MyController {
 
     @RequestMapping("/test")
     public String test() {
-        logger.info("-------------------------------------------------------------------");
+        for (int i = 0; i < 800; i++) {
+            logger.info("this is a info message {} ",i);
+            logger.warn("this is a warn message {} ",i);
+        }
         return myConfig == null ? "null" : myConfig.toString();
     }
 
@@ -82,6 +86,7 @@ public class MyController {
         HashMap<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("list",weights);
         resultMap.put("total",weightPageInfo.getTotal());
+        logger.info("成功的保存了一条记录,Weight={}", JSONObject.toJSONString(weight));
         return new Result("E000000","ok",true,resultMap);
     }
 

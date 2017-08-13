@@ -2,7 +2,16 @@ package com.example.demo.appender;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
+import com.example.demo.bean.MyLog;
+import com.example.demo.configration.MyBeanContainer;
+import com.example.demo.service.MyLogService;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PreDestroy;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by MrDing
@@ -10,17 +19,39 @@ import org.springframework.stereotype.Component;
  * Time:12:53
  */
 @Component
-public class MyAppender extends AppenderBase<ILoggingEvent> {
+public class MyAppender extends AppenderBase<ILoggingEvent>  {
 
     private  String location;
 
+    private MyLogService myLogService;
+
+    private ExecutorService executorService= Executors.newCachedThreadPool();
+
     @Override
     protected void append(ILoggingEvent iLoggingEvent) {
-        System.out.println(location);
-        System.out.println(iLoggingEvent.getTimeStamp());
-        System.out.println(iLoggingEvent.getThreadName());
+        Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
+        executorService.execute(()->{
+            myLogService = MyBeanContainer.getBean(MyLogService.class);
+            if (myLogService != null) {
+                MyLog myLog=new MyLog();
+                myLog.setTraceId(mdcPropertyMap.get("traceId"));
+                myLog.setLevel(iLoggingEvent.getLevel().toString());
+                myLog.setMessage(iLoggingEvent.getFormattedMessage());
+                myLog.setThread(iLoggingEvent.getThreadName());
+                myLog.setMethod(iLoggingEvent.getCallerData()[0].getClassName()
+                        + "." + iLoggingEvent.getCallerData()[0].getMethodName());
+                myLog.setLineNumber(iLoggingEvent.getCallerData()[0].getLineNumber());
+                myLog.setCreateTime(new Date(iLoggingEvent.getTimeStamp()));
+                myLogService.saveMyLog(myLog);
+            }
+        });
     }
 
+
+    @PreDestroy
+    public void shutrdown(){
+        executorService.shutdown();
+    }
 
 
     public String getLocation() {
@@ -30,4 +61,5 @@ public class MyAppender extends AppenderBase<ILoggingEvent> {
     public void setLocation(String location) {
         this.location = location;
     }
+
 }
