@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<mysql.version>5.1.41</mysql.version>
 		<guava.version>19.0</guava.version>
+		<pagehelper.version>5.0.0</pagehelper.version>
 		<mybatis-spring-boot-starter>1.3.0</mybatis-spring-boot-starter>
 	</properties>
 
@@ -61,8 +62,12 @@
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
-
-
+		<!--分页插件-->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>${pagehelper.version}</version>
+		</dependency>
 	</dependencies>
 
 

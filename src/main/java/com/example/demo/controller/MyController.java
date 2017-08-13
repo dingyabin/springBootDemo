@@ -4,6 +4,9 @@ import com.example.demo.bean.Weight;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
 import com.example.demo.service.WeightService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -67,11 +71,18 @@ public class MyController {
 
 
     @RequestMapping("/test3")
-    public List<Weight> test3(@RequestParam(name="exception",defaultValue = "2") long exception) {
+    public Map<String,Object> test3(@RequestParam(name="exception",defaultValue = "2") long exception) {
         Weight weight = new Weight();
         weight.setId(exception);
         weightService.insertWeight(weight);
-        return weightService.selectAll();
+
+        PageHelper.startPage(1,10);
+        List<Weight> weights = weightService.selectAll();
+        PageInfo<Weight> weightPageInfo=new PageInfo<>(weights);
+        HashMap<String, Object> resultMap = Maps.newHashMap();
+        resultMap.put("list",weights);
+        resultMap.put("total",weightPageInfo.getTotal());
+        return resultMap;
     }
 
 
