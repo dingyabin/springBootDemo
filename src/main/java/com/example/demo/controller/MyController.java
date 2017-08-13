@@ -1,14 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.bean.Weight;
-import com.example.demo.dao.WeightDao;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
+import com.example.demo.service.WeightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
@@ -39,7 +40,7 @@ public class MyController {
     private Student student2;
 
     @Resource
-    private WeightDao weightDao;
+    private WeightService weightService;
 
 
     @RequestMapping("/test")
@@ -66,8 +67,11 @@ public class MyController {
 
 
     @RequestMapping("/test3")
-    public List<Weight> test3() {
-        return weightDao.selectAll();
+    public List<Weight> test3(@RequestParam(name="exception",defaultValue = "2") long exception) {
+        Weight weight = new Weight();
+        weight.setId(exception);
+        weightService.insertWeight(weight);
+        return weightService.selectAll();
     }
 
 
