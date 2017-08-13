@@ -1,19 +1,18 @@
 package com.example.demo.controller;
 
+import com.example.demo.bean.Weight;
+import com.example.demo.dao.WeightDao;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,12 +38,17 @@ public class MyController {
     @Resource
     private Student student2;
 
+    @Resource
+    private WeightDao weightDao;
+
 
     @RequestMapping("/test")
     public String test() {
         logger.info("-------------------------------------------------------------------");
         return myConfig == null ? "null" : myConfig.toString();
     }
+
+
 
     @RequestMapping("/test2")
     public String test2() {
@@ -57,6 +61,16 @@ public class MyController {
         });
         return student2 == null ? "null" : student2.toString();
     }
+
+
+
+
+    @RequestMapping("/test3")
+    public List<Weight> test3() {
+        return weightDao.selectAll();
+    }
+
+
 
 
     @PreDestroy
