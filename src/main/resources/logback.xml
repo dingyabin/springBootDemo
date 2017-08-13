@@ -1,6 +1,6 @@
 <configuration debug="false" scan="false" scanPeriod="10 seconds">
 
-    <!--<property name="log.root" value="/data/logs"/>-->
+    <property name="log.root" value="log"/>
     <!--&lt;!&ndash; 引入 服务名, 做 日志文件路径 和 文件名 &ndash;&gt;-->
     <!--<include resource="appNameForLogback.xml"/>-->
     <property name="encoding" value="UTF-8"/>
@@ -14,30 +14,32 @@
         </encoder>
     </appender>
 
-    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-        <!--<file>${log.root}/${appName}/${appName}.log</file>-->
-        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-            <!--<FileNamePattern>${log.root}/${appName}/${appName}.log.%d{yyyy-MM-dd}.gz</FileNamePattern>-->
-            <!--<maxHistory>15</maxHistory>-->
-        <!--</rollingPolicy>-->
-        <!--<encoder>-->
-            <!--<pattern>${normal-pattern}</pattern>-->
-            <!--<charset>${encoding}</charset>-->
-        <!--</encoder>-->
-    <!--</appender>-->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.root}/springboot.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.root}/springboot.log.%d{yyyy-MM-dd}.gz</FileNamePattern>
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${normal-pattern}</pattern>
+            <charset>${encoding}</charset>
+        </encoder>
+    </appender>
 
-    <!-- 引入 WeLogAppender -->
-    <!--<include resource="logbackWeLogAppender.xml"/>-->
+    <appender name="MYAPPENDER" class="com.example.demo.appender.MyAppender">
+        <location>${log.root}/springboot.log</location>
+    </appender>
+
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <!--<appender-ref ref="FILE"/>-->
+        <appender-ref ref="FILE"/>
     </root>
 
     <logger name="com.example.demo" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
         <!--<appender-ref ref="FILE"/>-->
-        <!--<appender-ref ref="WeLog"/>-->
+        <!--<appender-ref ref="MYAPPENDER"/>-->
     </logger>
 
 </configuration>

@@ -44,11 +44,11 @@ public class MyFilter extends OncePerRequestFilter {
 
 
     private String getRequestHeader(HttpServletRequestWrapper requestWrapper) {
-        StringBuilder header = new StringBuilder("{\n");
+        StringBuilder header = new StringBuilder("{");
         Enumeration<String> names = requestWrapper.getHeaderNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
-            header.append(String.format("\"%s \": \"%s\" ,\n ", name, requestWrapper.getHeader(name)));
+            header.append(String.format("\"%s \": \"%s\", ", name, requestWrapper.getHeader(name)));
         }
         header.append("}");
 
@@ -57,9 +57,9 @@ public class MyFilter extends OncePerRequestFilter {
 
 
     private String getResponseHeader(HttpServletResponseWrapper response) {
-        StringBuilder header = new StringBuilder("{\n");
+        StringBuilder header = new StringBuilder("{");
         Collection<String> headerNames = response.getHeaderNames();
-        headerNames.forEach(name -> header.append(String.format("\"%s\" :\"%s\", \n ", name, response.getHeader(name))));
+        headerNames.forEach(name -> header.append(String.format("\"%s\" :\"%s\", ", name, response.getHeader(name))));
         header.append("}");
         return header.toString();
     }
