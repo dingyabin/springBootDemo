@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.bean.Weight;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
+import com.example.demo.result.Result;
 import com.example.demo.service.WeightService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -71,18 +72,17 @@ public class MyController {
 
 
     @RequestMapping("/test3")
-    public Map<String,Object> test3(@RequestParam(name="exception",defaultValue = "2") long exception) {
+    public Result test3(@RequestParam(name="exception",defaultValue = "2") long exception) {
         Weight weight = new Weight();
         weight.setId(exception);
         weightService.insertWeight(weight);
-
         PageHelper.startPage(1,10);
         List<Weight> weights = weightService.selectAll();
         PageInfo<Weight> weightPageInfo=new PageInfo<>(weights);
         HashMap<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("list",weights);
         resultMap.put("total",weightPageInfo.getTotal());
-        return resultMap;
+        return new Result("E000000","ok",true,resultMap);
     }
 
 
