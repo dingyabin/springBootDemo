@@ -19,21 +19,23 @@ import java.util.concurrent.Executors;
  * Time:12:53
  */
 @Component
-public class MyAppender extends AppenderBase<ILoggingEvent>  {
+public class MyAppender extends AppenderBase<ILoggingEvent> {
 
-    private  String location;
+    private String location;
 
     private MyLogService myLogService;
 
-    private ExecutorService executorService= Executors.newCachedThreadPool();
+    private ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Override
     protected void append(ILoggingEvent iLoggingEvent) {
         Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
-        executorService.execute(()->{
-            myLogService = MyBeanContainer.getBean(MyLogService.class);
+        executorService.execute(() -> {
+            if (myLogService == null) {
+                myLogService = MyBeanContainer.getBean(MyLogService.class);
+            }
             if (myLogService != null) {
-                MyLog myLog=new MyLog();
+                MyLog myLog = new MyLog();
                 myLog.setTraceId(mdcPropertyMap.get("traceId"));
                 myLog.setLevel(iLoggingEvent.getLevel().toString());
                 myLog.setMessage(iLoggingEvent.getFormattedMessage());
@@ -49,7 +51,7 @@ public class MyAppender extends AppenderBase<ILoggingEvent>  {
 
 
     @PreDestroy
-    public void shutrdown(){
+    public void shutrdown() {
         executorService.shutdown();
     }
 
