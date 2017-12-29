@@ -34,7 +34,7 @@ public class MyAppender extends AppenderBase<ILoggingEvent> {
             if (myLogService == null) {
                 myLogService = MyBeanContainer.getBean(MyLogService.class);
             }
-            if (myLogService != null) {
+            if (myLogService != null){
                 MyLog myLog = new MyLog();
                 myLog.setTraceId(mdcPropertyMap.get("traceId"));
                 myLog.setLevel(iLoggingEvent.getLevel().toString());
