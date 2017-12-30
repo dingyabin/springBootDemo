@@ -3,6 +3,7 @@ package com.example.demo;
 
 import com.example.demo.banner.Mybanner;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -22,8 +23,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DemoApplication {
 
     public static void main(String[] args) {
-
-        new SpringApplicationBuilder(DemoApplication.class).banner(new Mybanner()).run(args);
+        SpringApplication.run(DemoApplication.class,args);
+       // new SpringApplicationBuilder(DemoApplication.class).banner(new Mybanner()).run(args);
     }
 
 }

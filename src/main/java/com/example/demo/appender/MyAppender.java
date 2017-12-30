@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,9 +35,10 @@ public class MyAppender extends AppenderBase<ILoggingEvent> {
             if (myLogService == null) {
                 myLogService = MyBeanContainer.getBean(MyLogService.class);
             }
-            if (myLogService != null){
+            if (myLogService != null) {
                 MyLog myLog = new MyLog();
-                myLog.setTraceId(mdcPropertyMap.get("traceId"));
+                myLog.setTraceId(mdcPropertyMap.get("traceId") == null ?
+                        UUID.randomUUID().toString().replaceAll("-","") : mdcPropertyMap.get("traceId"));
                 myLog.setLevel(iLoggingEvent.getLevel().toString());
                 myLog.setMessage(iLoggingEvent.getFormattedMessage());
                 myLog.setThread(iLoggingEvent.getThreadName());

@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -18,6 +19,7 @@ import java.lang.reflect.Method;
  * @author MrDing
  */
 
+@Order(1)
 @Aspect
 @Component
 public class ChangeDataSourceAop {
@@ -31,6 +33,7 @@ public class ChangeDataSourceAop {
 
     @Before("pointcutMethod()")
     public void changeDataSource(JoinPoint joinPoint) {
+        //处理类上的注解
         Class<?>[] interfaces = joinPoint.getTarget().getClass().getInterfaces();
         for (Class<?> anInterface : interfaces) {
             if (anInterface.isAnnotationPresent(TargetDataSource.class)) {
@@ -38,7 +41,7 @@ public class ChangeDataSourceAop {
                 DynamicDataSourceHolder.setDataSource(annotation.value().getType());
             }
         }
-
+        //处理方法上的注解(会覆盖类上的注解)
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         if (method.isAnnotationPresent(TargetDataSource.class)) {

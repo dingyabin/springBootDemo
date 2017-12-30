@@ -24,10 +24,10 @@ public class WeightServiceImpl implements WeightService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class )
     public int insertWeight(Weight weight) {
         int count = weightDao.insertWeight(new Weight(33, 22, new Date()));
-        if (weight.getId() == 1) {
+        if (weight.getId() == 111) {
             throw new IllegalArgumentException("参数不合法!");
         }
         return count;

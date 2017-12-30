@@ -2,10 +2,12 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.bean.Weight;
+import com.example.demo.dao.TbUserDao;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
 import com.example.demo.result.Result;
 import com.example.demo.service.WeightService;
+import com.example.demo.view.MyDownLoadView;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
@@ -17,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +54,9 @@ public class MyController {
     @Resource
     private WeightService weightService;
 
+    @Resource
+    private TbUserDao tbUserDao;
+
 
     @RequestMapping("/test")
     public String test() {
@@ -63,7 +69,12 @@ public class MyController {
 
 
     @RequestMapping("/test2")
-    public String test2() {
+    public String test2(@RequestParam(name = "exception", required = false, defaultValue = "2") long exception) {
+
+        Weight weight = new Weight();
+        weight.setId(exception);
+        weightService.insertWeight(weight);
+
         Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
         executorService.execute(() -> {
             MDC.setContextMap(copyOfContextMap);
@@ -71,7 +82,7 @@ public class MyController {
                 logger.info("this is the {} times", i);
             }
         });
-        return student2 == null ? "null" : student2.toString();
+        return JSONObject.toJSONString(copyOfContextMap);
     }
 
 
@@ -102,6 +113,12 @@ public class MyController {
     public String test6(@RequestBody String josn){
         System.out.println(josn);
         return josn;
+    }
+
+    @RequestMapping("/test7")
+    public ModelAndView test7(){
+        InputStream stream = MyDownLoadView.class.getResourceAsStream("/banner/banner.txt");
+        return new ModelAndView(new MyDownLoadView("test.txt", stream));
     }
 
 
