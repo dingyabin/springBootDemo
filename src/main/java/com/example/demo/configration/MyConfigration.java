@@ -1,7 +1,6 @@
 package com.example.demo.configration;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.example.demo.aop.DataSourceType;
 import com.example.demo.datasource.DynamicDataSource;
 import com.example.demo.model.Student;
 import com.github.pagehelper.PageInterceptor;
@@ -11,9 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -59,6 +58,15 @@ public class MyConfigration {
         properties.put("helperDialect", "mysql");
         pageInterceptor.setProperties(properties);
         return pageInterceptor;
+    }
+
+
+    @Bean
+    @Primary
+    public MyPropertySources myPropertySources() throws Exception {
+        MyPropertySources myPropertySources = new MyPropertySources();
+        myPropertySources.setLocations(new PathMatchingResourcePatternResolver().getResources("classpath:**/*.properties"));
+        return myPropertySources;
     }
 
 

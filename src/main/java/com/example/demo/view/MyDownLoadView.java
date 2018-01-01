@@ -24,27 +24,35 @@ public class MyDownLoadView extends AbstractView {
     private byte[] sourceByte;
 
     public MyDownLoadView() {
+        initContentType();
     }
 
     public MyDownLoadView(String fileName, InputStream inputStream) {
         this.fileName = fileName;
         this.inputStream = inputStream;
+        initContentType();
     }
 
     public MyDownLoadView(String fileName, byte[] sourceByte) {
         this.fileName = fileName;
         this.sourceByte = sourceByte;
+        initContentType();
     }
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ServletOutputStream outputStream = response.getOutputStream();
-        response.setContentType("application/octet-stream");
+        response.setContentType(getContentType());
         response.addHeader("Content-Disposition", String.format("attachment;filename=%s", fileName != null ? fileName : "noName"));
         outputStream.write(inputStream != null ? IOUtils.toByteArray(inputStream) : sourceByte);
         outputStream.flush();
     }
 
+
+
+    public void initContentType() {
+        super.setContentType("application/octet-stream");
+    }
 
     public String getFileName() {
         return fileName;

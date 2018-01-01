@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.bean.Weight;
+import com.example.demo.configration.WeConfig;
 import com.example.demo.dao.TbUserDao;
 import com.example.demo.myConfig.MyConfig;
 import com.example.demo.model.Student;
@@ -120,6 +121,13 @@ public class MyController {
         InputStream stream = MyDownLoadView.class.getResourceAsStream("/banner/banner.txt");
         return new ModelAndView(new MyDownLoadView("test.txt", stream));
     }
+
+    @RequestMapping("/test8")
+    public String test8(String param){
+        System.out.println(param+"----------->"+WeConfig.get(param));
+        return WeConfig.get(param);
+    }
+
 
 
 }
